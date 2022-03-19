@@ -1,19 +1,25 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { Button, Dialog, Typography } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import styles from './PopUp.module.css';
 import ProfileBadge from '../ProfileBadge/ProfileBadge';
 
 function PopUp({ name, buddyNumber, open, size, setOpen }) {
-  const sharedCourses = ['course1', 'course2'];
-  const courses = sharedCourses.join(', ');
+  const selectedCourses = ['course1', 'course2', 'course 4'];
+  const buddyCourses = ['course1', 'course2', 'course 3'];
+  const [sharedCourses, setSharedCourses] = useState([])
+
+  const handleSharedCourses = () => {
+    setSharedCourses(selectedCourses.filter((x) => buddyCourses.includes(x)));
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleAddBuddy = () => {
-    handleClose();
+    handleSharedCourses();
+    // handleClose();
   }
 
   const handleSkip = () => {
@@ -29,7 +35,7 @@ function PopUp({ name, buddyNumber, open, size, setOpen }) {
         <h1> {name} </h1>
       </div>
       <div className={styles.courses}>
-        <Typography>Also takes {courses.toUpperCase()}</Typography>
+        <Typography>Also takes {sharedCourses.join(', ').toUpperCase()}</Typography>
       </div>
       <div className={styles.buddies}>
         <PeopleIcon sx={{ marginRight: '5px' }} />
