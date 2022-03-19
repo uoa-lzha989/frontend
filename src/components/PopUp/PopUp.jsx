@@ -4,9 +4,21 @@ import PeopleIcon from '@mui/icons-material/People';
 import styles from './PopUp.module.css';
 import ProfileBadge from '../ProfileBadge/ProfileBadge';
 
-function PopUp({ name, buddyNumber, open, size }) {
+function PopUp({ name, buddyNumber, open, size, setOpen }) {
   const sharedCourses = ['course1', 'course2'];
   const courses = sharedCourses.join(', ');
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleAddBuddy = () => {
+    handleClose();
+  }
+
+  const handleSkip = () => {
+    handleClose();
+  };
 
   return (
     <Dialog open={open} fullWidth data-testid='popup'>
@@ -25,6 +37,7 @@ function PopUp({ name, buddyNumber, open, size }) {
       </div>
       <div className={styles['message-button']}>
         <Button
+        onClick={handleAddBuddy}
           variant="contained"
           sx={{ maxWidth: '120px', maxHeight: '40px', minWidth: '120px', minHeight: '40px' }}>
           say hi
@@ -32,6 +45,7 @@ function PopUp({ name, buddyNumber, open, size }) {
       </div>
       <div className={styles['skip-button']}>
         <Button
+        onClick={handleSkip}
           variant="outlined"
           sx={{ maxWidth: '120px', maxHeight: '40px', minWidth: '120px', minHeight: '40px' }}>
           skip
