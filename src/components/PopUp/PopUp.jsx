@@ -5,16 +5,17 @@ import styles from './PopUp.module.css';
 import ProfileBadge from '../ProfileBadge/ProfileBadge';
 import LoadingComponent from '../Loading/LoadingComponent';
 import { findPairing } from '../../api/PairingAPI';
+import { getUserCourses } from '../../api/TimetableAPI';
 
-function PopUp({ open, setOpen }) {
+function PopUp({ open, setOpen, selectedCourses }) {
   let name = 'jason';
-  const selectedCourses = ['course1', 'course2', 'course 4'];
-  const buddyCourses = ['course1', 'course2', 'course 3'];
+  // const courses = ['course1', 'course2', 'course 3'];
+  const [courses, setCourses] = useState([]);
   const [sharedCourses, setSharedCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [buddyFound, setBuddyFound] = useState(false);
 
-  const handleSharedCourses = () => {
+  const handleSharedCourses = (buddyCourses) => {
     setSharedCourses(selectedCourses.filter((x) => buddyCourses.includes(x)));
   };
 
@@ -23,7 +24,6 @@ function PopUp({ open, setOpen }) {
   };
 
   const handleAddBuddy = () => {
-    handleSharedCourses();
     // handleClose();
   };
 
@@ -33,22 +33,35 @@ function PopUp({ open, setOpen }) {
 
   useEffect(() => {
     const findBuddy = async () => {
-       try {
-          const response = await findPairing(selectedCourses);
-          name = response[1].toString();
-      
+      try {
+        const response = await findPairing(selectedCourses);
+        name = response[1].toString();
       } catch (err) {
         console.log(err);
       } finally {
         setLoading(false);
-      };
-  }; 
-  if (!buddyFound) {
-  findBuddy();
-  setBuddyFound(true);
-  }
-}
-);
+      }
+    };
+
+    const getBuddyCourses = async () => {
+      try {
+        const response = await getUserCourses(1);
+        setCourses(response);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        handleSharedCourses(courses);
+      }
+
+    }
+
+    if (!buddyFound) {
+      findBuddy();
+      setBuddyFound(true);
+    } else {
+      getBuddyCourses();
+    }
+  }, []);
 
   return (
     <Dialog open={open} fullWidth data-testid="popup">
