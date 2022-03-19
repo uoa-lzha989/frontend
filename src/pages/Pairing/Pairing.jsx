@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CourseCard from '../../components/CourseCard/CourseCard';
+import PopUp from '../../components/PopUp/PopUp';
 
 import styles from './Pairing.module.css';
 import { getCourses } from '../../api/TimetableAPI';
@@ -21,6 +22,7 @@ function Pairing() {
   const [numOfSelectedCourses, setNumOfSelectedCourses] = useState(0);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [open, setOpen] = useState(false);
 
   /**
    * If the course is not selected, add to the selectedCourses list.
@@ -45,7 +47,9 @@ function Pairing() {
   /**
    * Send selected course to popup componenet
    */
-  const handleFindBuddy = () => {};
+  const handleFindBuddy = () => {
+    setOpen(true);
+  };
 
   /**
    * Fetch course timetable
@@ -78,6 +82,11 @@ function Pairing() {
           <Typography color="primaryDark">FIND MY BUDDY</Typography>
           <ArrowForwardIcon />
         </StyledButton>
+        <PopUp
+          open={open}
+          setOpen={setOpen}
+          selectedCourses={selectedCourses}
+        />
       </Grid>
     </Grid>
   );
